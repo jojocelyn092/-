@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>營運助理職能測驗</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:#f5f4f0;min-height:100vh;display:flex;align-items:flex-start;justify-content:center;padding:2rem 1rem;}
+#qz{width:100%;max-width:640px;}
+.badge{display:inline-block;font-size:11px;font-weight:500;letter-spacing:.08em;padding:4px 12px;border-radius:20px;background:#ece9e3;color:#666;border:0.5px solid #ddd;text-transform:uppercase;}
+.card{background:#fff;border:0.5px solid #e0ddd7;border-radius:16px;padding:1.75rem;}
+.progress-bar{height:3px;background:#e0ddd7;border-radius:2px;overflow:hidden;margin:1rem 0 1.5rem;}
+.progress-fill{height:100%;background:#378ADD;border-radius:2px;transition:width .4s ease;}
+.q-num{font-size:12px;color:#aaa;font-weight:500;letter-spacing:.06em;margin-bottom:.5rem;}
+.q-text{font-family:'Noto Serif TC',serif;font-size:16px;line-height:1.9;color:#1a1a1a;margin-bottom:1.5rem;font-weight:400;}
+.opt-btn{width:100%;text-align:left;padding:13px 16px;border-radius:10px;border:0.5px solid #ddd;background:#fff;color:#1a1a1a;cursor:pointer;font-size:14px;line-height:1.6;font-family:'DM Sans',sans-serif;display:flex;gap:12px;align-items:flex-start;transition:border-color .15s,background .15s;margin-bottom:9px;}
+.opt-btn:hover{border-color:#bbb;background:#fafaf8;}
+.opt-btn.correct{border-color:#1D9E75 !important;background:#E1F5EE !important;}
+.opt-btn.wrong{border-color:#E24B4A !important;background:#FCEBEB !important;}
+.opt-btn:disabled{cursor:default;}
+.letter{width:22px;height:22px;border-radius:50%;border:0.5px solid #ccc;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500;color:#888;flex-shrink:0;margin-top:2px;transition:background .15s,color .15s;}
+.opt-btn.correct .letter{background:#1D9E75;color:#fff;border-color:#1D9E75;}
+.opt-btn.wrong .letter{background:#E24B4A;color:#fff;border-color:#E24B4A;}
+.rationale{margin-top:1rem;padding:12px 14px;border-left:2px solid #378ADD;background:#f0f6fd;border-radius:0 10px 10px 0;font-size:13px;color:#444;line-height:1.7;}
+.next-btn{margin-top:1.25rem;padding:10px 22px;border-radius:10px;border:0.5px solid #ccc;background:#fff;color:#1a1a1a;cursor:pointer;font-size:14px;font-weight:500;font-family:'DM Sans',sans-serif;transition:background .15s;}
+.next-btn:hover{background:#f5f4f0;}
+.score-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.25rem;}
+.score-num{font-size:13px;font-weight:500;color:#888;}
+.result-wrap{text-align:center;padding:2rem 0;}
+.result-score{font-family:'Noto Serif TC',serif;font-size:64px;font-weight:600;color:#1a1a1a;line-height:1;}
+.result-label{font-size:14px;color:#888;margin-top:.5rem;}
+.eval-box{margin:1.5rem 0;padding:1rem 1.25rem;border-radius:12px;background:#f5f4f0;border:0.5px solid #e0ddd7;font-size:14px;color:#333;line-height:1.8;text-align:left;}
+.restart-btn{padding:10px 28px;border-radius:10px;border:0.5px solid #ccc;background:#fff;color:#1a1a1a;cursor:pointer;font-size:14px;font-weight:500;font-family:'DM Sans',sans-serif;transition:background .15s;}
+.restart-btn:hover{background:#f5f4f0;}
+.start-wrap{text-align:center;padding:2rem 0;}
+.start-title{font-family:'Noto Serif TC',serif;font-size:24px;font-weight:600;color:#1a1a1a;margin-bottom:.75rem;}
+.start-desc{font-size:14px;color:#666;line-height:1.9;margin-bottom:2rem;}
+.start-btn{padding:13px 36px;border-radius:10px;border:0.5px solid #bbb;background:#fff;color:#1a1a1a;cursor:pointer;font-size:15px;font-weight:500;font-family:'DM Sans',sans-serif;transition:background .15s;}
+.start-btn:hover{background:#f5f4f0;}
+.tag-row{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:2rem;}
+.screen{display:none;}
+.screen.active{display:block;}
+</style>
+</head>
+<body>
+<div id="qz">
+
+<div id="start-view" class="screen active">
+  <div class="start-wrap">
+    <p class="badge" style="margin-bottom:1.5rem;">職能甄試</p>
+    <p class="start-title">營運助理職能測驗</p>
+    <p class="start-desc">共 10 題選擇題，涵蓋 ERP 操作、收付款處理與費用判斷<br>請根據實務邏輯選出最正確的答案</p>
+    <div class="tag-row">
+      <span class="badge">ERP 帳務</span>
+      <span class="badge">進銷貨</span>
+      <span class="badge">應收應付</span>
+      <span class="badge">發票開立</span>
+    </div>
+    <button class="start-btn" onclick="startQuiz()">開始測驗 →</button>
+  </div>
+</div>
+
+<div id="quiz-view" class="screen">
+  <div class="score-row">
+    <span class="badge" id="q-badge">問題 1 / 10</span>
+    <span class="score-num" id="live-score">得分：0 分</span>
+  </div>
+  <div class="progress-bar"><div class="progress-fill" id="prog" style="width:10%"></div></div>
+  <div class="card">
+    <p class="q-num" id="q-num">Q1</p>
+    <p class="q-text" id="q-text"></p>
+    <div id="opts"></div>
+    <div id="rationale-box" class="rationale" style="display:none;"></div>
+    <button class="next-btn" id="next-btn" style="display:none;" onclick="nextQ()">下一題 →</button>
+  </div>
+</div>
+
+<div id="result-view" class="screen">
+  <div class="result-wrap">
+    <p class="badge" style="margin-bottom:1.5rem;">測驗結束</p>
+    <p class="result-score" id="r-score">0</p>
+    <p class="result-label">總得分 / 100</p>
+    <div class="eval-box" id="eval-box"></div>
+    <button class="restart-btn" onclick="restart()">重新挑戰 →</button>
+  </div>
+</div>
+
+</div>
+<script>
+const Qs=[
+  {q:"公司向供應商進貨（先拿貨、下個月再付錢），在 ERP 錄入這筆「進貨單」時，對公司帳務的直接影響為何？",opts:["公司手上的現金立刻變少","公司欠供應商的錢（應付帳款）增加","供應商欠公司的錢（應收帳款）增加","對帳務沒有影響，要等付錢那天才能輸入"],c:1,r:"拿了貨但還沒給錢，代表公司對外部供應商的債務增加，應付帳款上升。"},
+  {q:"公司「先支付」了一整年的辦公室租金，這筆在月初就付出去的錢，在觀念上應先列為何者？",opts:["預付款項（因為錢買到了未來一年的使用權利）","營業費用（因為錢已經從銀行扣掉了）","營業收入（屬於賺到的錢）","應收帳款（屬於加盟主欠公司的錢）"],c:0,r:"錢已付出但服務尚未享用完畢，屬於公司的資產（未來的使用權利）。"},
+  {q:"關於「費用」與「預付款項」的差異，下列敘述何者正確？",opts:["只要錢付出去的那一刻，通通都叫做費用","已經發生且無法退還的開銷（如電話費、電費）稱為費用","錢付給別人但對方還沒提供服務稱為費用","以上皆非"],c:1,r:"費用代表已消耗掉、通常無法收回的經濟價值；尚未享用的開銷則屬資產。"},
+  {q:"加盟主「先匯款 5 萬元」到公司帳戶，但他「還沒下單」買貨。請問這筆錢在 ERP 中應如何記錄？",opts:["記錄為公司的「營業費用」","記錄為該加盟主的「預收款項」","直接記錄為「銷貨收入」","標記為「應付帳款」，因為這是欠員工的錢"],c:1,r:"公司先幫加盟主保管這筆錢，等他未來下單時再扣抵，故應列預收款項。"},
+  {q:"在處理 ERP 進銷貨時，若進貨單位是「箱」(1箱=24瓶)，銷貨是「瓶」。下列哪種操作會導致庫存「嚴重少計」？",opts:["進貨 10 箱，在系統數量欄輸入「10」且單位選錯成「瓶」","進貨 10 箱，在系統輸入「240 瓶」","銷貨時忘記在備註欄寫收件人姓名","進貨日期不小心輸成昨天"],c:0,r:"系統以為只進了 10 瓶，比實際少了 230 瓶，庫存嚴重少計。"},
+  {q:"加盟主匯款 $19,970，但系統顯示欠款為 $20,000（經查為扣手續費 $30）。最專業的處理方式是？",opts:["手動把原單據改成 $19,970，使金額相符","只沖銷 $19,970，讓系統一直顯示他欠 $30","沖銷全額 $20,000，將 $30 差額錄入「手續費」費用使帳目結清","直接退匯，要求他補匯 $30 後再處理"],c:2,r:"標準做法：應收帳款歸零，$30 差額正確認列為手續費費用。"},
+  {q:"若不慎將要開給加盟店（有統編）的「三聯式發票」開成一般人的「二聯式發票」，該如何補救？",opts:["用立可帶把統編填上去就好","請加盟主自行在發票背面寫上統編","收回原發票作廢，重新開立正確的三聯式發票","告訴加盟主沒關係，下次再補開一張雙倍金額的給他"],c:2,r:"發票不得塗改，必須收回作廢重開才是合法程序。"},
+  {q:"關於多元支付（如 LINE Pay）的帳務錄入，哪種做法最能避免對帳錯誤？",opts:["看到手機顯示支付成功，就立刻在 ERP 輸入「收到現金」","先記錄為「待撥款項」，等銀行存摺實際收到錢後再沖帳","支付平台會自動處理，助理不需要在 ERP 做動作","每個月底隨便抓一個總數輸入系統即可"],c:1,r:"確保金流（銀行）與資訊流（ERP）完全同步，是對帳無誤的關鍵。"},
+  {q:"若發現收款沖帳入錯了對象（A 加盟主的錢沖到了 B 的帳面上），應該如何更正？",opts:["既然總金額沒錯，就不用更正，下次注意就好","聯絡 B 加盟主，叫他把錢匯給 A 加盟主","作廢或反向調整該筆錯誤收款單，重新正確錄入 A 與 B 的帳目","在 B 的帳面備註「這筆是 A 的錢」，但不修改數據"],c:2,r:"回溯更正是確保對帳單精確的唯一方法，備註並不能修正系統數字。"},
+  {q:"身為營運助理，在跟加盟主「催收款項」時，最核心的準備工具是什麼？",opts:["加盟主通訊錄（含聯絡電話／地址）","清楚的應收帳款明細表（對帳單）","其他加盟主的付款紀錄","最新的庫存報表"],c:1,r:"有憑有據的對帳明細是溝通欠款最專業的工具，讓催收有所依據。"}
+];
+
+let idx=0,score=0,answered=false;
+
+function show(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+function startQuiz(){show('quiz-view');renderQ();}
+function renderQ(){
+  answered=false;
+  const q=Qs[idx];
+  document.getElementById('q-badge').textContent=`問題 ${idx+1} / ${Qs.length}`;
+  document.getElementById('q-num').textContent=`Q${idx+1}`;
+  document.getElementById('q-text').textContent=q.q;
+  document.getElementById('rationale-box').style.display='none';
+  document.getElementById('next-btn').style.display='none';
+  document.getElementById('prog').style.width=((idx+1)/Qs.length*100)+'%';
+  document.getElementById('live-score').textContent=`得分：${score} 分`;
+  const c=document.getElementById('opts');
+  c.innerHTML='';
+  q.opts.forEach((o,i)=>{
+    const b=document.createElement('button');
+    b.className='opt-btn';
+    b.innerHTML=`<span class="letter">${String.fromCharCode(65+i)}</span><span>${o}</span>`;
+    b.onclick=()=>pick(i,b,q);
+    c.appendChild(b);
+  });
+}
+function pick(i,btn,q){
+  if(answered)return;
+  answered=true;
+  document.querySelectorAll('.opt-btn').forEach(b=>b.disabled=true);
+  if(i===q.c){
+    score+=10;
+    btn.classList.add('correct');
+  } else {
+    btn.classList.add('wrong');
+    document.querySelectorAll('.opt-btn')[q.c].classList.add('correct');
+  }
+  document.getElementById('live-score').textContent=`得分：${score} 分`;
+  const rb=document.getElementById('rationale-box');
+  rb.textContent=q.r;
+  rb.style.display='block';
+  const nb=document.getElementById('next-btn');
+  nb.textContent=idx<Qs.length-1?'下一題 →':'查看結果 →';
+  nb.style.display='inline-block';
+}
+function nextQ(){
+  idx++;
+  if(idx<Qs.length){renderQ();}else{showResult();}
+}
+function showResult(){
+  show('result-view');
+  document.getElementById('r-score').textContent=score;
+  let ev='';
+  if(score>=90)ev='表現卓越 🎯  帳務邏輯非常清晰，具備專業的實務判斷能力，可快速上手作業。';
+  else if(score>=70)ev='表現優良 👍  具備良好基礎，適度教育訓練後即可獨立作業，繼續加油！';
+  else ev='尚待加強 📚  對帳務邏輯仍較模糊，建議多了解 ERP 實務，降低入帳出錯率。';
+  document.getElementById('eval-box').textContent=ev;
+}
+function restart(){idx=0;score=0;answered=false;show('quiz-view');renderQ();}
+</script>
+</body>
+</html>
